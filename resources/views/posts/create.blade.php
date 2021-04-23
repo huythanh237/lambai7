@@ -34,12 +34,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Categories</label>
-                        <select name="categories">
-                            <option value="0">The Thao</option>
-                            <option value="1">Du Lich</option>
-                            <option value="2">Van Hoa</option>
-                            <option value="3" selected="selected">Nghe Thuat</option>
+                        <label>Choose category:</label>
+                        <select name="$categories" id="$categories" multiple>
+                            @foreach($categories as $category)
+                                <option value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
                         </select>
                     </div>
 

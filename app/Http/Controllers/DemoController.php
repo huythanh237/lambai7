@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,8 @@ class DemoController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+        return view('posts.create', compact('categories'));
     }
 
     /**
@@ -36,7 +38,8 @@ class DemoController extends Controller
      */
     public function store(Request $request)
     {
-
+        $post = Post::with('categories')->create($request->only('slug', 'title', 'content'));
+        $post->categories()->sync($request->input('categories'));
     }
 
     /**
@@ -58,8 +61,9 @@ class DemoController extends Controller
      */
     public function edit($id)
     {
+        $categories = Category::all();
         $post = Post::with('categories')->findOrFail($id);
-        return view('posts.edit', compact('post'));
+        return view('posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -71,7 +75,10 @@ class DemoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = Post::with('categories')->findOrFail($id);
+        $post->update($request->only('slug', 'title', 'content'));
+
+        return redirect()->route('posts.index');
     }
 
     /**
